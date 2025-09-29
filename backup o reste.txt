@@ -1,0 +1,671 @@
+import math
+
+liste = ["+","-","*","/","^","!"]
+def plus(a,b):
+    c=a+b
+    return c
+def minus(a,b):
+    c=a-b
+    return c
+def mal(a,b):
+    c=a*b
+    return c
+def geteilt(a,b):
+    c=a/b
+    return c
+def wurzel(a):
+    return math.sqrt(a)
+def potenz(a,b):
+    c=a
+    for i in range(b-1): c*=a
+    return c
+def faktorial(a):
+    return math.factorial(a)
+
+while True:
+    a=""
+    b=""
+    f=""
+    x=""
+    x=input("Gib deine zweistellige Rechnung ein: ")
+    for h in range(len(x)):
+        # print("x",h)
+        for i in range(len(liste)):
+            # print("liste ",i)
+            if liste[i] in x[h]:
+                f=liste[i]
+                a=x[:h]
+                b=x[h+1:]
+                # print(a)
+                # print(b)
+    # print(a, "\n", b)
+    a=int(a)
+    if len(b): b=int(b)
+    if f=="+": print(plus(a,b))
+    if f=="-": print(minus(a,b))
+    if f=="*": print(mal(a,b))
+    if f=="/": print(geteilt(a,b))
+    if f=="^": print(potenz(a,b))
+    if f=="!": print(faktorial(a))
+
+
+
+
+
+import math
+
+liste = ["+","-","*","/","^","!","v"]
+def plus(a,b):
+    return a+b
+def minus(a,b):
+    return a-b
+def mal(a,b):
+    return a*b
+def geteilt(a,b):
+    return a/b
+def wurzel(a):
+    return math.sqrt(a)
+def potenz(a,b):
+    c=a
+    for i in range(b-1): c*=a
+    return c
+def faktorial(a):
+    return math.factorial(a)
+while True:
+    a=""
+    b=""
+    f=""
+    x=input("Gib deine Rechnung ein: ")
+    if x=="pi": 
+        print(math.pi)
+    for h in range(len(x)):
+        for i in range(len(liste)):
+            if liste[i] in x[h]:
+                f=liste[i]
+                a=x[:h]
+                b=x[h+1:]
+    if len(a): a=int(a)
+    if len(b): b=int(b)
+    if f=="+": print(plus(a,b))
+    if f=="-": print(minus(a,b))
+    if f=="*": print(mal(a,b))
+    if f=="/": print(geteilt(a,b))
+    if f=="^": print(potenz(a,b))
+    if f=="!": print(faktorial(a))
+    if f=="v": print(wurzel(b))
+
+
+
+
+
+
+
+
+
+
+from pydub import AudioSegment
+import glob
+
+location = 'C:\Users\Florian\Downloads\Pack\assets\minecraft'
+lautst = 15
+
+oggs = []
+soundpack = location + '/**/*.ogg'
+for file in glob.glob(soundpack, recursive=True):
+    oggs.append(file)
+print(oggs)
+print(len(oggs))
+i=0
+print(oggs[0][83::])
+print(oggs[0].split("\\"))
+
+for x in oggs:
+    song = AudioSegment.from_ogg(x)
+    neu = song + lautst
+    audiopath = r"C:/Users/Florian/Desktop/Soundpack/" + oggs[i].split("\\")[7] + "/" + oggs[i].split("\\")[-1]
+    print(audiopath)
+    # print(x)
+    neu.export(audiopath, format="ogg")
+    i+=1
+    print(x + " wurde als " + audiopath + " exportiert.")
+
+
+
+
+
+
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import os
+import json
+from urllib2.request import urlopen
+import sys
+import time
+
+# adding path to geckodriver to the OS environment variable
+# assuming that it is stored at the same path as this script
+os.environ["PATH"] += os.pathsep + os.getcwd()
+download_path = "dataset/"
+
+def main():
+    searchtext = sys.argv[1] # the search query
+    num_requested = int(sys.argv[2]) # number of images to download
+    number_of_scrolls = num_requested / 400 + 1 
+    # number_of_scrolls * 400 images will be opened in the browser
+
+    if not os.path.exists(download_path + searchtext.replace(" ", "_")):
+        os.makedirs(download_path + searchtext.replace(" ", "_"))
+
+    url = "https://www.google.co.in/search?q="+searchtext+"&source=lnms&tbm=isch"
+    driver = webdriver.Firefox()
+    driver.get(url)
+
+    headers = {}
+    headers['User-Agent'] = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+    extensions = {"jpg", "jpeg", "png", "gif"}
+    img_count = 0
+    downloaded_img_count = 0
+
+    for _ in xrange(number_of_scrolls):
+        for __ in xrange(10):
+            # multiple scrolls needed to show all 400 images
+            driver.execute_script("window.scrollBy(0, 1000000)")
+            time.sleep(0.2)
+        # to load next 400 images
+        time.sleep(0.5)
+        try:
+            driver.find_element_by_xpath("//input[@value='Show more results']").click()
+        except Exception as e:
+            print("Less images found:", e)
+            break
+
+    # imges = driver.find_elements_by_xpath('//div[@class="rg_meta"]') # not working anymore
+    imges = driver.find_elements_by_xpath('//div[contains(@class,"rg_meta")]')
+    print("Total images:", len(imges), "\n")
+    for img in imges:
+        img_count += 1
+        img_url = json.loads(img.get_attribute('innerHTML'))["ou"]
+        img_type = json.loads(img.get_attribute('innerHTML'))["ity"]
+        print("Downloading image", img_count, ": ", img_url)
+        try:
+            if img_type not in extensions:
+                img_type = "jpg"
+            req = urllib2.Request(img_url, headers=headers)
+            raw_img = urllib2.urlopen(req).read()
+            f = open(download_path+searchtext.replace(" ", "_")+"/"+str(downloaded_img_count)+"."+img_type, "wb")
+            f.write(raw_img)
+            f.close
+            downloaded_img_count += 1
+        except Exception as e:
+            print("Download failed:", e)
+        finally:
+            print
+        if downloaded_img_count >= num_requested:
+            break
+
+    print("Total downloaded: ", downloaded_img_count, "/", img_count)
+    driver.quit()
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+
+    colors = ['red', 'green', 'blue']
+    bar_colors = ['#FF0000', '#00FF00', '#0000FF']
+    line_styles = ['r-', 'g-', 'b-']
+    # plt.bar(colors, average_color, color=bar_colors)
+    # plt.figure()
+    # lines = plt.plot(values)
+    print(values[0][0])
+    print(len(values))
+    
+    # print(img)
+    print(middle_pixel_color)
+
+
+    # datei.write(str(asdf))
+
+
+
+
+
+
+  # esc to quit
+        # px = ImageGrab.grab().load()
+        # color = px[mouse.get_position()]
+        # print(color)
+        middle_pixel_color = img[middle_y, middle_x]
+        average_color = np.mean(img, axis=(0, 1))
+        # values.append(average_color)
+        # plot(values)
+
+
+
+
+        
+        height, width, _ = img.shape
+        middle_x = width // 2
+        middle_y = height // 2
+
+
+
+
+
+# # t.sleep(5)
+# for i in range(10):
+#     rest, frame = cam.read()
+#     cv2.imshow("test", frame)
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+#     t.sleep(20)
+#     cv2.destroyWindow("test")
+    # # px = ImageGrab.grab().load()
+    # # color = px[mouse.get_position()]
+    # # print(color)
+    # # values.append(color[0])
+# # plt.plot(values)
+# # plt.show()
+
+
+
+    # calculate_bpm_for_entire_timeline(peaks, history_with_time)
+    # if len(history_with_time) > 5: 
+    #     for x in history_with_time:
+        
+        # for i in range(0, len(peaks)):
+        #     real_time_between_ticks_average.append(float(history_with_time[peaks[i-1]]) - float(history_with_time[peaks[i]]))
+    # print(real_time_between_ticks)
+    # if len(peaks) > 5: 
+    #     for i in range(0, 5):
+    #         difference_average.append(peaks[len(peaks) - 1 - i] - peaks[len(peaks) - 2 - i])
+    # print(peaks)
+
+
+    
+print(np.round(t.time(), 0))
+
+def calculate_bpm_for_entire_timeline(peaks, history_with_time):
+    average_time_between_pulses_in_ticks = np.average(time_between_peaks(peaks))
+    for i in range(len(history_with_time)):
+        if len(history_with_time) > i + 1:
+            time_differences.append(float(history_with_time[i+1]) - float(history_with_time[i]))
+    for j in range(len(peaks)):
+        if len(peaks) > j and len(time_differences) > j:
+            peaks_difference.append(peaks[j] * time_differences[j])
+    real_time_between_ticks = np.average(time_differences)
+    print("real time between ticks " + str(real_time_between_ticks))
+    print("average time between pulses in ticks " + str(average_time_between_pulses_in_ticks))
+    print("average time between pulses in seconds " + str(real_time_between_ticks * average_time_between_pulses_in_ticks))
+    bpm = 60 / (real_time_between_ticks * average_time_between_pulses_in_ticks)
+    print("bpm " + str(bpm))
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def time_between_peaks(peaks):
+#     pulses = []
+#     for i in range(len(peaks)):
+#         if len(peaks) > i + 1:
+#             pulses.append(peaks[i+1] - peaks[i])
+#     return pulses
+
+
+# def get_average_rgb(camera):
+#     ret, frame = camera.read()
+#     if not ret:
+#         raise Exception("Failed to capture a frame from the camera.")
+#     average_color = np.mean(frame, axis=(0, 1))
+    
+#     return average_color
+
+# def update_plot(frame, red_line, green_line, blue_line, camera, ax2):
+#     average_rgb = get_average_rgb(camera)
+#     # red_value = average_rgb[0]
+#     red_history.append(average_rgb[0])
+#     green_history.append(average_rgb[1])
+#     blue_history.append(average_rgb[2])
+#     times.append(t.time())
+#     formatted_values = ["{:.2f}".format(value % 100) for value in times]
+#     red_line.set_ydata(np.pad(red_history, (history_length - len(red_history), 0)))
+#     green_line.set_ydata(np.pad(green_history, (history_length - len(green_history), 0)))
+#     blue_line.set_ydata(np.pad(blue_history, (history_length - len(blue_history), 0)))
+#     ymax = np.max([red_history,green_history,blue_history])
+#     ymin = np.min([red_history,green_history,blue_history])
+#     if ymin >= 2: ymin-=2
+#     ymax +=2
+#     ax2.set_ylim(ymin, ymax)
+#     brightness = (average_rgb[0] + average_rgb[1] + average_rgb[2])/3
+#     if brightness < 70:
+#         peaks = detect_pulse(blue_history, formatted_values)
+#         draw_pulse_lines(peaks, ax2, len(red_history))
+
+# def detect_pulse(red_history, history_with_time):
+    
+#     peaks, _ = find_peaks(red_history, height=threshold, distance=min_distance)
+#     # for x in peaks:
+#         # if len(peaks) > 0: pulses.append(peaks[x]-peaks[x-1])
+#         # print(bpm)
+#     peaks_difference = []
+#     average_time_between_pulses_in_ticks = np.average(time_between_peaks(peaks))
+#     for i in range(len(history_with_time)):
+#         if len(history_with_time) > i + 1:
+#             time_differences.append(float(history_with_time[i+1]) - float(history_with_time[i]))
+#     for j in range(len(peaks)):
+#         peaks_difference.append(peaks[j] * time_differences[j])
+#     # print(time_differences)
+#     real_time_between_ticks = np.average(time_differences)
+#     # print(real_time_between_ticks)
+#     print("real time between ticks " + str(real_time_between_ticks))
+#     print("average time between pulses in ticks " + str(average_time_between_pulses_in_ticks))
+#     print("average time between pulses in seconds " + str(real_time_between_ticks * average_time_between_pulses_in_ticks))
+#     bpm = 60 / (real_time_between_ticks * average_time_between_pulses_in_ticks)
+#     # print(bpm)
+#     print("bpm " + str(bpm))
+#     if len(peaks) > 0:
+#         # print("Pulse detected at frames:", peaks)
+#         return peaks
+#     else:
+#         return peaks
+
+# def draw_pulse_lines(peaks, ax, num_frames):
+#     global pulse_lines
+#     min_frame_index = num_frames - history_length
+#     pulse_lines = [line for line in pulse_lines if line.get_xdata()[0] >= min_frame_index]
+#     for line in pulse_lines:
+#         line.remove()
+#     pulse_lines = []
+#     x_coords = [peak for peak in peaks if peak >= min_frame_index]
+#     for x_coord in x_coords:
+#         line = ax.axvline(x=x_coord, color='gray', linestyle='--', linewidth=1, alpha=0.5)
+#         pulse_lines.append(line)
+#     # print(len(pulse_lines))
+#     excess_lines = len(pulse_lines) - history_length
+#     if excess_lines > 0:
+#         pulse_lines[:excess_lines] = []
+#     # current_index = (len(red_history)-(len(red_history) - 1))
+#     # pulse_lines = [line for line in pulse_lines if line.get_xdata()[0] >= current_index]
+#     # if len(pulse_lines) > 50: pulse_lines.pop()
+#     # x_coords = [current_index + peak for peak in peaks]
+#     # if len(x_coords) > 50: x_coords.pop() 
+#     # for x_coord in x_coords:
+#     #     line = ax2.axvline(x=x_coord, color='gray', linestyle='--', linewidth=1, alpha=0.5)
+#     #     pulse_lines.append(line)
+#     # if len(pulse_lines) > 50: pulse_lines.pop(1)
+#     # print(len(pulse_lines))
+#     # pulse_lines = [line for line in pulse_lines if line.get_xdata()[-1] >= 0]
+#     # for peak in peaks:
+#     #     line = ax2.axvline(x=peak, color='gray', linestyle='--', linewidth=1, alpha=0.5)
+#     #     pulse_lines.append(line)
+
+# def main():
+#     camera = cv2.VideoCapture(0)
+#     try:
+#         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+        
+#         num_channels = history_length
+#         x = np.arange(num_channels)
+#         red_history = np.zeros(history_length)
+#         green_history = np.zeros(history_length)
+#         blue_history = np.zeros(history_length)
+#         red_line, = ax2.plot(x, red_history, 'r-', label='Red')
+#         green_line, = ax2.plot(x, green_history, 'g-', label='Green')
+#         blue_line, = ax2.plot(x, blue_history, 'b-', label='Blue')
+        
+#         ax2.set_title("Average RGB Values Over Time")
+#         ax2.set_xlabel("Time")
+#         ax2.set_ylabel("Average Value")
+#         ax2.legend()
+        
+#         camera_frame = ax1.imshow(np.zeros((480, 640, 3), dtype=np.uint8))
+        
+#         def update_frame(i):
+#             ret, frame = camera.read()
+#             if ret:
+#                 camera_frame.set_data(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        
+#         anim = FuncAnimation(fig, update_frame, interval=update_time)
+#         anim2 = FuncAnimation(fig, update_plot, fargs=(blue_line, green_line, red_line, camera, ax2), interval=update_time, save_count=history_length)
+#         plt.show()
+#     except Exception as e:
+#         print("Error:", e)
+    
+#     camera.release()
+#     cv2.destroyAllWindows()
+
+# if __name__ == "__main__":
+#     main()
+# def show_webcam(mirror=False):
+#     cam = cv2.VideoCapture(0)
+#     for i in range(200):
+#         ret_val, img = cam.read()
+#         if mirror: 
+#             img = cv2.flip(img, 1)
+#         cv2.imshow('my webcam', img)
+#         if cv2.waitKey(1) == 27: 
+#             break
+#         fig, ax = plt.subplots()
+        
+#         # num_channels = 3
+#         # x = np.arange(num_channels)
+#         # red_line, = ax.plot(x, np.zeros(num_channels), 'r-', label='Red')
+#         # green_line, = ax.plot(x, np.zeros(num_channels), 'g-', label='Green')
+#         # blue_line, = ax.plot(x, np.zeros(num_channels), 'b-', label='Blue')
+
+#         num_channels = history_length
+#         x = np.arange(num_channels)
+#         red_history = np.zeros(history_length)
+#         green_history = np.zeros(history_length)
+#         blue_history = np.zeros(history_length)
+#         red_line, = ax.plot(x, red_history, 'r-', label='Red')
+#         green_line, = ax.plot(x, green_history, 'g-', label='Green')
+#         blue_line, = ax.plot(x, blue_history, 'b-', label='Blue')
+        
+#         ax.set_title("Average RGB Values")
+#         ax.set_xlabel("Time")
+#         ax.set_ylabel("Average Value")
+#         ax.set_ylim(0, 255)
+#         anim = FuncAnimation(fig, update_plot, fargs=(red_line, green_line, blue_line, cam), interval=100, save_count=history_length)
+#         plt.show()
+#     datei.close
+#     cv2.destroyAllWindows()
+
+
+# def main():
+#     show_webcam(mirror=True)
+
+# def plot(values):
+#         rpoints = []
+#         gpoints = []
+#         bpoints = []
+#         for a in range(len(values)):          
+#             rpoints.append(values[a][2])
+#             gpoints.append(values[a][1])
+#             bpoints.append(values[a][0])
+#         plt.plot(rpoints, c = 'red')
+#         plt.plot(gpoints, c = 'green') 
+#         plt.plot(bpoints, c = 'blue')
+#         plt.show() 
+
+# def update_plot(frame, red_line, green_line, blue_line, camera):
+#     average_rgb = get_average_rgb(camera)
+#     red_history.append(average_rgb[0])
+#     green_history.append(average_rgb[1])
+#     blue_history.append(average_rgb[2])
+
+#     red_line.set_ydata(np.pad(red_history, (history_length - len(red_history), 0)))
+#     green_line.set_ydata(np.pad(green_history, (history_length - len(green_history), 0)))
+#     blue_line.set_ydata(np.pad(blue_history, (history_length - len(blue_history), 0)))
+
+#     return red_line, green_line, blue_line
+# # def update_plot(frame, red_line, green_line, blue_line, camera):
+# #     average_rgb = get_average_rgb(camera)
+# #     red_history.append(average_rgb[0])
+# #     green_history.append(average_rgb[1])
+# #     blue_history.append(average_rgb[2])
+    
+# #     red_line.set_ydata(red_history)
+# #     green_line.set_ydata(green_history)
+# #     blue_line.set_ydata(blue_history)
+    
+# #     ax.set_ylim(min(min(red_history), min(green_history), min(blue_history)) - 20, max(max(red_history), max(green_history), max(blue_history)) + 20)
+    
+# #     return red_line, green_line, blue_line
+
+     
+# def get_average_rgb(camera):
+#     ret, frame = camera.read()
+
+#     if not ret:
+#         raise Exception("Failed to capture a frame from the camera.")
+    
+#     average_color = np.mean(frame, axis=(0, 1))
+    
+#     return average_color
+
+# if __name__ == '__main__':
+#     main()
+
+
+
+
+
+
+
+
+function cipher_iii(input_bytes) {
+    key1 = < ??? >
+    key2 = < ??? >
+    previousOutput = 0
+    
+    output_bytes = []
+
+    for (i = 0; i < input_bytes.length; i++) {
+        current_key = previousOutput XOR (i MODULO 2 == 0 ? key1 : key2)
+        xor_byte = byte XOR current_key
+        previousOutput = xor_byte
+        output_bytes.append(xor_byte)
+    }
+
+    return output_bytes
+}
+
+message = < ??? >
+bytes = ascii_string_to_bytes(message)
+encrypted_bytes = cipher_ii(bytes)
+hex_string = convert_bytes_to_hex_string(encrypted_bytes)
+print(hex_string)
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////
+function ascii_string_to_bytes(input_string) {
+    const bytes = [];
+    for (let i = 0; i < input_string.length; i++) {
+        bytes.push(input_string.charCodeAt(i));
+    }
+    return bytes;
+}
+
+function convert_bytes_to_hex_string(bytes) {
+    return bytes.map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+function convert_hex_string_to_bytes(hex_string) {
+    const bytes = [];
+    for (let i = 0; i < hex_string.length; i += 2) {
+        bytes.push(parseInt(hex_string.substr(i, 2), 16));
+    }
+    return bytes;
+}
+
+function cipher(input_string) {
+    const key = 42;
+    const input_bytes = ascii_string_to_bytes(input_string);
+    const output_bytes = [];
+
+    for (const byte of input_bytes) {
+        const xor_byte = byte ^ key;
+        output_bytes.push(xor_byte);
+    }
+
+    return convert_bytes_to_hex_string(output_bytes);
+}
+
+function decipher(encrypted_hex_string, key) {
+    
+    const encrypted_bytes = convert_hex_string_to_bytes(encrypted_hex_string);
+    const decrypted_bytes = [];
+    let previousOutput = 0
+    for (const byte of encrypted_bytes) {
+        const current_key = previousOutput ^ key;
+        const xor_byte = byte ^ current_key;
+        previousOutput = byte;
+        decrypted_bytes.push(xor_byte);
+    }
+
+    // Convert decrypted bytes back to string
+    const textDecoder = new TextDecoder('utf-8');
+    const decrypted_message = textDecoder.decode(new Uint8Array(decrypted_bytes));
+
+    return decrypted_message;
+}
+
+
+encrypted_hex_string = "4c2f513f5a3256355d3e577a1e60193458204e2b066f0b631d750a27690d70157d022f4c2846235a771b740a68097108255b3f51345c23002d680c641b365f3753305875395a23593b443d0a27781c6206600221"
+let key = 0
+for (key = 0; key < 256; key++){
+    setTimeout((key) => {
+        // console.clear()
+        let decrypted_message = decipher(encrypted_hex_string, key);
+        console.log("Key: " + key + ", Decrypted: " + decrypted_message);
+    }, key * 500, key);
+}
+
+////////////////////////////////////////////////////////////////////////
+
+function cipher_ii(input_bytes) {
+    key = < ??? >
+    previousOutput = 0
+    
+    output_bytes = []
+
+    for (byte in input_bytes) {
+        current_key = previousOutput XOR key
+        xor_byte = byte XOR current_key
+        previousOutput = xor_byte
+        output_bytes.append(xor_byte)
+    }
+
+    return output_bytes
+}
+
+message = < ??? >
+bytes = ascii_string_to_bytes(message)
+encrypted_bytes = cipher_ii(bytes)
+hex_string = convert_bytes_to_hex_string(encrypted_bytes)
+print(hex_string)
