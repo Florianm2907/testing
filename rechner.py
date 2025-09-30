@@ -1,7 +1,6 @@
 import math
 
 liste = ["+","-","*","/","^","!","v"]
-
 def plus(a,b):
     return a+b
 def minus(a,b):
@@ -23,7 +22,6 @@ def zusammenrechnen(m):
     for i in range(len(m)):
         sum+=m[i]
     return sum
-
 while True:
     argumente=[]
     rechenzeichen=[]
@@ -41,9 +39,30 @@ while True:
         if liste[i] in x: asd.append(x.split(liste[i]))
         print(liste[i])
         print(asd)
+    # print(x)
+    # for i in range(len(liste)):
+    #     f = x.find(liste[i])
+    #     if not f == -1: rechenzeichen.append(liste[i])
+    
+    # for i in range(len(liste)):
+    #     if liste[i] in x:
+            
+    # for h in range(len(x)):
+    #     if x[h]=="+" or x[h]=="-" or x[h]=="*" or x[h]=="/" or x[h]=="!" or x[h]=="^" or x[h]=="v":
+    #         rechenzeichen.append(x[h])
+    #     else:
+    #         argumente.append(x[h])
+    # for i in range(len(x)):
         
     print(argumente)
     print(rechenzeichen)
+    
+    # for l in range(len(argumente)):
+    #     for m in range(len(liste)):
+    #         if argumente[l]==liste[m]:
+    #             argumente.remove(liste[m])
+    #             print("hier")
+    #             print(argumente)
     if len(argumente)==1: a=int(argumente[0])
     else: b=int(argumente[0])
     
