@@ -39,22 +39,3 @@ score = len(password)
 score *= types_used
 
 print(f"Your password scored {score} points, {len(password)} points for the length itself and {score - len(password)} points for using {types_used} different types of characters!")
-
-# lower = count_occurrences(password, "lower")
-# upper = count_occurrences(password, "upper")
-# number = count_occurrences(password, "number")
-# special = count_occurrences(password, "special")
-
-# password_contains["lower"] = count_occurrences(password, "lower")
-# password_contains["upper"] = count_occurrences(password, "upper")
-# password_contains["number"] = count_occurrences(password, "number")
-# password_contains["special"] = count_occurrences(password, "special")
-
-# if lower and upper:
-# 	password_strength = (lower + upper) * 2
-# if upper and number:
-# 	password_strength = (upper + number) * 2
-# if number and special:
-# 	password_strength = (number + special) * 2
-# if special and lower:
-# 	password_strength = (special + lower) * 2
