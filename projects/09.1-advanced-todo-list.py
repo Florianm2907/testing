@@ -1,6 +1,7 @@
 '''9. Basic To-Do List (text only)
 	•	Let the user add, remove, and view tasks in a list.
-	•	Keep looping until they type quit.'''
+	•	Keep looping until they type quit.
+    •	Add store functionality.'''
 
 todo = []
 
