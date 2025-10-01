@@ -87,3 +87,109 @@ Skills used: lists (optional), loops, conditionals, strings.
 	•	Play multiple rounds until the user quits.
 
 Skills used: input, conditionals, random, loops.
+
+
+11. Word Reverser
+
+Ask the user for a word.
+
+Print the word backwards.
+
+Extend it: keep asking for words until the user types “stop”.
+
+Skills used: strings, slicing, loops, input.
+
+
+12. Prime Number Checker
+
+Ask the user for a number.
+
+Tell them if it’s prime or not.
+
+Extend it: print all prime numbers up to that number.
+
+Skills used: conditionals, loops, arithmetic, input.
+
+
+13. Dice Roller
+
+Simulate rolling one or two dice.
+
+Print the result each time.
+
+Extend it: let the user choose how many dice to roll.
+
+Skills used: random, loops, input, arithmetic.
+
+
+14. Word Counter
+
+Ask the user for a sentence.
+
+Count how many words it has.
+
+Extend it: also show the most common letter.
+
+Skills used: strings, lists, loops, dictionaries.
+
+
+15. Hangman (simple version)
+
+Computer picks a word.
+
+User guesses letters until they get it right or run out of tries.
+
+Show guessed letters and blanks after each turn.
+
+Skills used: strings, loops, conditionals, random.
+
+
+16. ATM Simulator
+
+Start with a balance (say $100).
+
+User can “deposit”, “withdraw”, or “check balance”.
+
+Loop until they type “exit”.
+
+Skills used: variables, loops, conditionals, arithmetic.
+
+
+17. Palindrome Checker
+
+Ask the user for a word.
+
+Tell them if it reads the same forward and backward.
+
+Skills used: strings, slicing, conditionals.
+
+
+18. Number Summation Game
+
+Keep asking the user for numbers.
+
+Add them up until the user types “done”.
+
+Print the total sum.
+
+Skills used: loops, input, type conversion, arithmetic.
+
+
+19. Calendar Day Finder
+
+Ask user for a date (YYYY-MM-DD).
+
+Print what day of the week it was.
+
+Skills used: datetime module, input, string parsing.
+
+
+20. Quiz Game
+
+Create 3–5 multiple-choice questions.
+
+Ask the user one by one.
+
+Keep score and print results at the end.
+
+Skills used: lists, conditionals, loops, input.
